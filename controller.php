@@ -19,47 +19,51 @@ class Controller {
 	}
 
 	function creaEmpleado() {
-		echo "<br>" . $nombre = $_POST['nombre'];
-		echo "<br>" . $documento = $_POST['documento'];
-		echo "<br>" . $email = $_POST['email'];
-		echo "<br>" . $sexo = $_POST['sexo'];
-		echo "<br>" . $area = $_POST['area'];
-		echo "<br>" . $descripcion = $_POST['descripcion'];
-		echo "<br>" . $boletin = $_POST['boletin'];
+		$nombre = $_POST['nombre'];
+		$email = $_POST['email'];
+		$sexo = $_POST['sexo'];
+		$area = $_POST['area'];
+		$boletin = $_POST['boletin'];
+		$descripcion = $_POST['descripcion'];
 
-		for ($i=1; $i <= 30 ; $i++) {
-			if ($_POST['rol_'.$i] != '') {
+		for ($i = 1; $i <= 30 ; $i++) {
+			if (isset($_POST['rol_'.$i])) {
 				$rol[] = $_POST['rol_'.$i];
 			}
 		}
 
-		echo "<br>" . $rol[];
+		$crea_empleado = new Model();
+		$result = $crea_empleado->crea($nombre, $email, $sexo, $area, $boletin, $descripcion, $rol);
 
-		//$crea_empleado = new Model();
-		//$result = $crea_empleado->crea($nombre, $documento, $email, $sexo, $area, $descripcion, $boletin, $rol[]//);
-
-		/*if ($result == 'ok') {
-			header("location:../View/usuarios.php");
-		}*/
+		if ($result == 'insert') {
+			header("location:tabla_empleados.php?insert");
+		}
 	}
 
+	function actualizaEmpleado() {
 
-
-
-	function actualizaUsuario() {
-
+		$id_empleado = $_POST['id_empleado'];
 		$nombre = $_POST['nombre'];
-		$apellido = $_POST['apellido'];
-		$documento = $_POST['documento'];
-		$correo = $_POST['correo'];
-		$telefono = $_POST['telefono'];
+		$email = $_POST['email'];
+		$area = $_POST['area'];
+		$descripcion = $_POST['descripcion'];
+
+		$edita_empleado = new Model();
+		$result = $edita_empleado->modifica($id_empleado, $nombre, $email, $area, $descripcion);
+
+		if ($result == 'update') {
+			header("location:tabla_empleados.php?update");
+		}		
+	}
+
+	function eliminaEmpleado() {
 		$id = $_POST['id'];
 
-		$instancia_actualiza = new UsuarioModel();
-		$result = $instancia_actualiza->actualiza($nombre, $apellido, $documento, $correo, $telefono, $id);
+		$elimina_empleado = new Model();
+		$result = $elimina_empleado->elimina($id);
 
-		if ($result == 'ok') {
-			header("location:../View/usuarios.php");
+		if ($result == 'delete') {
+			header("location:tabla_empleados.php?delete");
 		}		
 	}
 }
@@ -69,8 +73,14 @@ if (isset($_POST['btn_guardar'])) {
 	$crea->creaEmpleado();
 }
 
-if (isset($_POST['btn_usuario_act'])) {
-	$actualiza = new UsuarioController();
-	$actualiza->actualizaUsuario();
+if (isset($_POST['btn_actualizar'])) {
+	$actualiza = new Controller();
+	$actualiza->actualizaEmpleado();
 }
+
+if (isset($_POST['btn_eliminar'])) {
+	$actualiza = new Controller();
+	$actualiza->eliminaEmpleado();
+}
+
 ?>

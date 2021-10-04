@@ -1,11 +1,28 @@
 <?php
-require_once ("model.php");
+    require_once ("model.php");
 
-$datos_area = new Model();
-$array_area = $datos_area->area();
+    $datos_area = new Model();
+    $array_area = $datos_area->area();
 
-$datos_rol = new Model();
-$array_rol = $datos_rol->rol();
+    $datos_rol = new Model();
+    $array_rol = $datos_rol->rol();
+
+    if (isset($_POST['btn_editar'])) {
+
+        $tipo_formulario = "Actualizar";
+        $op_boton = "btn_actualizar";
+        $boton = "Actualizar";
+
+        $datos_empleado = new Model();
+        $array_empleado = $datos_empleado->busca_empleado($_POST['id']);
+        $info_empleado = $array_empleado->fetch_array();
+    } else {
+        $tipo_formulario = "Crear";
+        $op_boton = "btn_guardar";
+        $boton = "Guardar";
+    }
+
+
 
 ?>
 
@@ -34,9 +51,10 @@ $array_rol = $datos_rol->rol();
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
-                            <h2>Crear Empleado</h2>
+                        <div class="col-sm-3 col-sm-offset-2">
+                            <h2><?php echo $tipo_formulario;?> Empleado</h2>
                         </div>
+                        <a href="tabla_empleados.php"><button class="btn btn-primary text-right">Visualizar empleados</button></a>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -52,21 +70,15 @@ $array_rol = $datos_rol->rol();
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Nombre completo *</label>
                             <div class="col-sm-7">
-                                <input type="text" name="nombre" id="nombre" placeholder="Nombre completo del empleado" class="form-control">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Documento *</label>
-                            <div class="col-sm-7">
-                                <input type="text" name="documento" id="documento" placeholder="Numero de documento del empleado" class="form-control">
+                                <input type="text" name="nombre" id="nombre" placeholder="Nombre completo del empleado" class="form-control" value="<?php echo $info_empleado['nombre'];?>">
+                                <input type="hidden" name="id_empleado" value="<?php echo $info_empleado['id'];?>">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Correo electrónico *</label>
                             <div class="col-sm-7">
-                                <input type="email" name="email" id="email" placeholder="Correo electrónico" class="form-control">
+                                <input type="email" name="email" id="email" placeholder="Correo electrónico" class="form-control" value="<?php echo $info_empleado['email'];?>">
                             </div>
                         </div>
 
@@ -86,7 +98,7 @@ $array_rol = $datos_rol->rol();
                             <label class="col-sm-3 control-label">Área *</label>
                             <div class="col-sm-7">
                                 <select name="area" id="area" class="form-control" required>
-                                    <option></option>
+                                    <option value="<?php echo $info_empleado['area_id'];?>"><?php echo $info_empleado['area'];?></option>
                                     <?php
                                         while ($row_area = $array_area->fetch_assoc()) {
                                     ?>
@@ -101,7 +113,7 @@ $array_rol = $datos_rol->rol();
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Descripción *</label>
                             <div class="col-sm-7">
-                                <textarea name="descripcion" id="descripcion" placeholder="Descripción de la experienca del empleado" class="form-control" rows="4"></textarea>
+                                <textarea name="descripcion" id="descripcion" placeholder="Descripción de la experienca del empleado" class="form-control" rows="4"><?php echo $info_empleado['descripcion'];?></textarea>
                             </div>
                         </div>
 
@@ -135,7 +147,7 @@ $array_rol = $datos_rol->rol();
 
                         <div class="form-group">
                             <div class="col-sm-4 col-sm-offset-3">
-                                <button class="btn btn-primary" type="submit" name="btn_guardar">Guardar</button>
+                                <button class="btn btn-primary" type="submit" name="<?php echo $op_boton;?>"><?php echo $boton;?></button>
                             </div>
                         </div>
                     </form>
